@@ -1,38 +1,39 @@
 `default_nettype none
 `timescale 1ns/1ps
 
-/*
-this testbench just instantiates the module and makes some convenient wires
-that can be driven / tested by the cocotb test.py
-*/
+
+// This testbench just instantiates the module and makes some convenient wires
+// that can be driven/tested by the cocotb test.py
 
 module tb (
-    // testbench is controlled by test.py
+    // Testbench is controlled by test.py
     input clk,
-    input rst,
-    output [6:0] segments
-   );
+    input reset,
+    input read,
+    input [3:0] nibble,
+    output [7:0] result
+);
 
-    // this part dumps the trace to a vcd file that can be viewed with GTKWave
+    // This part dumps the trace to a .vcd file that can be viewed with GTKWave:
     initial begin
         $dumpfile ("tb.vcd");
         $dumpvars (0, tb);
         #1;
     end
 
-    // wire up the inputs and outputs
-    wire [7:0] inputs = {6'b0, rst, clk};
+    // Wire up the inputs and outputs to our respective test signals:
+    wire [7:0] inputs = {nibble, 1'b0, read, reset, clk};
     wire [7:0] outputs;
-    assign segments = outputs[6:0];
+    assign result = outputs;
 
-    // instantiate the DUT
-    seven_segment_seconds seven_segment_seconds(
+    // Instantiate the DUT (Device Under Test):
+    anton_plus_minus anton_plus_minus(
         `ifdef GL_TEST
-            .vccd1( 1'b1),
-            .vssd1( 1'b0),
+        .vccd1( 1'b1),
+        .vssd1( 1'b0),
         `endif
         .io_in  (inputs),
         .io_out (outputs)
-        );
+    );
 
 endmodule
