@@ -27,7 +27,7 @@ module tb (
     assign result = outputs;
 
     // Instantiate the DUT (Device Under Test):
-    anton_product anton_product(
+    algofoogle_product algofoogle_product(
         `ifdef GL_TEST
             .vccd1( 1'b1),
             .vssd1( 1'b0),

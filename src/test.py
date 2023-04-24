@@ -3,12 +3,13 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles
 
 
-def product_of_nibbles(value):
-    return (value>>4) * (value&15)
-
+async def send_nibble(dut, value):
+    dut.nibble.value = value
+    await RisingEdge(dut.clk)
+    await FallingEdge(dut.clk)
 
 @cocotb.test()
-async def test_plus_minus(dut):
+async def test_product(dut):
     dut._log.info("start")
     clock = Clock(dut.clk, 100, units="us") # 10kHz clock.
     cocotb.start_soon(clock.start())
@@ -24,33 +25,29 @@ async def test_plus_minus(dut):
     # Advance to the next falling edge of the clock:
     await FallingEdge(dut.clk)
 
-    # Now clock in some 8-bit values, as pairs of nibbles (high first, then low):
-    feed = [169, 168, 167, 166]
-    for i in feed:
-        dut.read.value = 0
-        # Clock in one value as 2 nibbles:
-        hi_nibble = i >> 4
-        lo_nibble = i & 15
-        dut.nibble.value = hi_nibble
-        await RisingEdge(dut.clk)
-        await FallingEdge(dut.clk)
-        dut.nibble.value = lo_nibble
-        await RisingEdge(dut.clk)
-        await FallingEdge(dut.clk)
-        # Make sure our current value is what we're seeing on the outputs:
-        result = int(dut.result.value)
-        assert result == i
-        # Now get the product of the 2 nibbles:
-        dut.read.value = 1
-        await RisingEdge(dut.clk)
-        await FallingEdge(dut.clk)
-        result = int(dut.result.value)
-        assert result == hi_nibble * lo_nibble
+    # Make sure reset has cleared our accumulator:
+    assert dut.result.value == 0
 
-    # Now prove that if we keep 'read' high, we continue to modify the product:
+    # Make sure clocking in nibbles shifts things as expected
+    # and reveals the accumulator on our `result` output:
+    dut.read.value = 0
+    await send_nibble(dut, 0b1101) # 13
+    assert dut.result.value == 0b0000_1101
+    await send_nibble(dut, 0b0110) # 6
+    assert dut.result.value == 0b1101_0110
+    await send_nibble(dut, 0b1011) # 11
+    assert dut.result.value == 0b0110_1011
+
+    # Make sure `read` signal causes product(s) to be calculated:
     dut.read.value = 1
-    for i in range(5):
-        result = int(dut.result.value)
-        await RisingEdge(dut.clk)
-        await FallingEdge(dut.clk)
-        assert product_of_nibbles(result) == int(dut.result.value)
+    await RisingEdge(dut.clk)
+    await FallingEdge(dut.clk)
+    assert dut.result.value == 0b0100_0010 # 66, product of 6 and 11.
+    await RisingEdge(dut.clk)
+    await FallingEdge(dut.clk)
+    assert dut.result.value == 0b0000_1000 # 8, product of 4 and 2.
+    await RisingEdge(dut.clk)
+    await FallingEdge(dut.clk)
+    assert dut.result.value == 0b0000_0000 # 0, product of 0 and 8.
+
+

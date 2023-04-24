@@ -1,6 +1,6 @@
 `default_nettype none
 
-module anton_product (
+module algofoogle_product (
     input   [7:0]   io_in,
     output  [7:0]   io_out
 );

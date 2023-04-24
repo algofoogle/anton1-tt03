@@ -1,14 +1,13 @@
 --- 
 # TinyTapeout project information
 project:
-  wokwi_id:    0        # If using wokwi, set this to your project's ID
+  wokwi_id: 0  # Using HDL, not Wokwi.
 
 # If using an HDL, set wokwi_id as 0 and uncomment and list your source files here. 
 # Source files must be in ./src and you must list each source file separately
   source_files:        
-    - counter.v
-    - decoder.v
-  top_module:  "seven_segment_seconds"      # put the name of your top module here, make it unique by prepending your github username
+    - product.v
+  top_module:  "algofoogle_product"      # put the name of your top module here, make it unique by prepending your github username
 
 # Keep a track of the submission yaml
 yaml_version: 3.0
@@ -18,47 +17,64 @@ yaml_version: 3.0
 #
 # Here is a great example: https://github.com/davidsiaw/tt02-davidsiaw-stackcalc/blob/38c5647f83aad2aec675d566aa3d67b98f0aac81/info.yaml
 documentation: 
-  author:       "Matt Venn"
-  title:        "7 segment seconds"
+  author:       "Anton Maurovic"
+  title:        "Simple multiply test"
   language:     "Verilog"
-  description:  "Count up to 10, one second at a time."
+  description:  "Clock in 2 nibbles, convert them to their product."
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
-      Uses a set of registers to divide the clock, and then some combinational logic
-      to convert from binary to decimal for the display.
+      On each rising clock edge, if `read` is 0, shift in a nibble from the `nibble`
+      input into an internal 8-bit accumulator. Shift in your high nibble first, then low.
+      Subsequent clocks will each shift in another nibble, discarding the high nibble and
+      promoting the existing low nibble to high.
 
-      Puts a slower square wave output on output 7.
+      If `read` is 1 on a rising clock edge, the internal accumulator is replaced with
+      the product of the currently-loaded two nibbles.
 
-# Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
+      The 8-bit accumulator value is always present on output pins (i.e. `result`).
+
+# Instructions on how someone could test your project:
   how_to_test:  |
-      After reset, the counter should increase by one every second.
+      After synchronous reset, expect `result` output to be 0.
+
+      Set `read` to 0, `nibble` to (say) `0b1101`, then cycle the clock (raise, lower).
+      Expect `result` to now be `0b00001101`.
+
+      Then set `nibble` to `0b0110`, and cycle the clock again.
+      Expect `result` to now be `0b11010110`.
+
+      Why not one more? Set `nibble` to `0b1011` and cycle the clock.
+      Expect `result` to now be `0b01101011`.
+
+      Set `read` to 1 and cycle the clock.
+      Expect `result` to now be `0b01000010` (i.e. 66, the product of `0b0110` and `0b1011`).
 
 # A description of what the inputs do
   inputs:               
     - clock
     - reset
+    - read
     - none
-    - none
-    - none
-    - none
-    - none
-    - none
+    - nibble[0]
+    - nibble[1]
+    - nibble[2]
+    - nibble[3]
 # A description of what the outputs do
   outputs:
-    - segment a
-    - segment b
-    - segment c
-    - segment d
-    - segment e
-    - segment f
-    - segment g
-    - slow clock output
+    - result[0]
+    - result[1]
+    - result[2]
+    - result[3]
+    - result[4]
+    - result[5]
+    - result[6]
+    - result[7]
 
 # The following fields are optional
-  tag:          "timer, test"      # comma separated list of tags: test encryption, experiment, clock, animation, utility, industrial, pwm, fpga, alu, microprocessor, risc, riscv, sensor, signal generator, fft, filter, music, bcd, sound, serial, timer, random number generator, calculator, decoder, counter, puzzle, multiplier, game, oscillator,
+  tag:          "test"      # comma separated list of tags: test encryption, experiment, clock, animation, utility, industrial, pwm, fpga, alu, microprocessor, risc, riscv, sensor, signal generator, fft, filter, music, bcd, sound, serial, timer, random number generator, calculator, decoder, counter, puzzle, multiplier, game, oscillator,
   external_hw:  ""      # Describe any external hardware needed
-  discord:      "mattvenn#1907"      # Your discord handle, used for communication and automatically assigning tapeout role after a submission
+  discord:      "algofoogle#4505"      # Your discord handle, used for communication and automatically assigning tapeout role after a submission
   doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
-  clock_hz:     1000       # Clock frequency in Hz (if required)
+  clock_hz:     "Any"   # Clock frequency in Hz (if required)
   picture:      ""      # relative path to a picture in your repository
