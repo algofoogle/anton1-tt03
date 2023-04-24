@@ -8,11 +8,11 @@ module algofoogle_product (
     wire        reset  = io_in[1];
     wire [3:0]  nibble = io_in[7:4];
 
-    reg [3:0]   state;
+    reg [2:0]   state;
 
-    reg [31:0]  product;
+    reg [15:0]  product;
 
-    assign io_out = product[31:24];
+    assign io_out = product[15:8];
 
     always @(posedge clk) begin
         if (reset) begin
@@ -20,17 +20,17 @@ module algofoogle_product (
             product <= 0;
             state <= 0;
         end else begin
-            if (state < 8) begin
-                // We're clocking in 8 nibbles (2 16-bit values):
-                product <= {product[27:0],nibble};
-            end else if (state == 8) begin
+            if (state < 4) begin
+                // We're clocking in 4 nibbles (2 byte values):
+                product <= {product[11:0],nibble};
+            end else if (state == 4) begin
                 // We've got the data we need; now calculate the product:
-                product <= {16'b0,product[15:0]} * {16'b0,product[31:16]};
+                product <= {8'b0,product[7:0]} * {8'b0,product[15:8]};
             end else begin
-                // Start clocking out the result, as 4 bytes.
+                // Start clocking out the result, as 2 bytes.
                 product <= product << 8;
             end
-            state <= (state==11) ? 0 : state+1;
+            state <= (state==5) ? 0 : state+1;
         end
     end
 

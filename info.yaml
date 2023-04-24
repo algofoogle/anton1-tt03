@@ -20,15 +20,15 @@ documentation:
   author:       "Anton Maurovic"
   title:        "Simple multiply"
   language:     "Verilog"
-  description:  "Multiply two 16-bit numbers, get a 32-bit result."
+  description:  "Multiply two 8-bit numbers, get a 16-bit result."
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
       Do synchronous reset first, then on each rising clock edge...
 
-      Clock in each of two 16-bit values, one `nibble` at a time (high to low).
+      Clock in each of two 8-bit values, one `nibble` at a time (high to low).
 
-      Then clock out a 32-bit value, one byte (via `result`) at a time (high to low).
+      Then clock out a 16-bit value, one byte (via `result`) at a time (high to low).
 
 # Instructions on how someone could test your project:
   how_to_test:  |
@@ -36,9 +36,9 @@ documentation:
 
       Set `nibble` to a value of your choice, then pulse the clock.
 
-      Repeat 7 more times.
+      Repeat 3 more times.
 
-      Then pulse the clock 4 more times, each time expecting to get a byte at the output `result`.
+      Then pulse the clock 1 more times, each time expecting to get a byte at the output `result`.
 
 # A description of what the inputs do
   inputs:               

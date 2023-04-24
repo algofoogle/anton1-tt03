@@ -8,14 +8,14 @@ async def send_nibble(dut, value):
     await RisingEdge(dut.clk)
     await FallingEdge(dut.clk)
 
-async def send_word(dut, value):
-    for i in range(4):
-        await send_nibble(dut, (value & 0xF000) >> 12)
+async def send_byte(dut, value):
+    for i in range(2):
+        await send_nibble(dut, (value & 0xF0) >> 4)
         value <<= 4
 
-async def get_dword(dut):
+async def get_word(dut):
     word = 0
-    for i in range(4):
+    for i in range(2):
         await RisingEdge(dut.clk)
         await FallingEdge(dut.clk)
         word <<= 8
@@ -43,18 +43,17 @@ async def test_product(dut):
     # Test multiplies
     data = [
         [10,10],
-        [123,456],
-        [256,256],
-        [65535,65535],
-        [12345,54321],
-        [8888,11111]
+        [123,234],
+        [255,255],
+        [0,189],
+        [88,111]
     ]
 
     for pair in data:
         a = pair[0]
         b = pair[1]
-        await send_word(dut, a)
-        await send_word(dut, b)
-        p = await get_dword(dut)
+        await send_byte(dut, a)
+        await send_byte(dut, b)
+        p = await get_word(dut)
         dut._log.info("Product {a:09d}*{b:09d}:".format(a=a, b=b))
         assert p == a*b, "Expected {ab:08x} but got {p:08x}".format(ab=a*b, p=p)
