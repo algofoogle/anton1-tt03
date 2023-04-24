@@ -18,43 +18,33 @@ yaml_version: 3.0
 # Here is a great example: https://github.com/davidsiaw/tt02-davidsiaw-stackcalc/blob/38c5647f83aad2aec675d566aa3d67b98f0aac81/info.yaml
 documentation: 
   author:       "Anton Maurovic"
-  title:        "Simple multiply test"
+  title:        "Simple multiply"
   language:     "Verilog"
-  description:  "Clock in 2 nibbles, convert them to their product."
+  description:  "Multiply two 16-bit numbers, get a 32-bit result."
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
-      On each rising clock edge, if `read` is 0, shift in a nibble from the `nibble`
-      input into an internal 8-bit accumulator. Shift in your high nibble first, then low.
-      Subsequent clocks will each shift in another nibble, discarding the high nibble and
-      promoting the existing low nibble to high.
+      Do synchronous reset first, then on each rising clock edge...
 
-      If `read` is 1 on a rising clock edge, the internal accumulator is replaced with
-      the product of the currently-loaded two nibbles.
+      Clock in each of two 16-bit values, one `nibble` at a time (high to low).
 
-      The 8-bit accumulator value is always present on output pins (i.e. `result`).
+      Then clock out a 32-bit value, one byte (via `result`) at a time (high to low).
 
 # Instructions on how someone could test your project:
   how_to_test:  |
       After synchronous reset, expect `result` output to be 0.
 
-      Set `read` to 0, `nibble` to (say) `0b1101`, then cycle the clock (raise, lower).
-      Expect `result` to now be `0b00001101`.
+      Set `nibble` to a value of your choice, then pulse the clock.
 
-      Then set `nibble` to `0b0110`, and cycle the clock again.
-      Expect `result` to now be `0b11010110`.
+      Repeat 7 more times.
 
-      Why not one more? Set `nibble` to `0b1011` and cycle the clock.
-      Expect `result` to now be `0b01101011`.
-
-      Set `read` to 1 and cycle the clock.
-      Expect `result` to now be `0b01000010` (i.e. 66, the product of `0b0110` and `0b1011`).
+      Then pulse the clock 4 more times, each time expecting to get a byte at the output `result`.
 
 # A description of what the inputs do
   inputs:               
     - clock
     - reset
-    - read
+    - none
     - none
     - nibble[0]
     - nibble[1]
@@ -72,7 +62,7 @@ documentation:
     - result[7]
 
 # The following fields are optional
-  tag:          "test"      # comma separated list of tags: test encryption, experiment, clock, animation, utility, industrial, pwm, fpga, alu, microprocessor, risc, riscv, sensor, signal generator, fft, filter, music, bcd, sound, serial, timer, random number generator, calculator, decoder, counter, puzzle, multiplier, game, oscillator,
+  tag:          "test, multiplier"      # comma separated list of tags: test encryption, experiment, clock, animation, utility, industrial, pwm, fpga, alu, microprocessor, risc, riscv, sensor, signal generator, fft, filter, music, bcd, sound, serial, timer, random number generator, calculator, decoder, counter, puzzle, multiplier, game, oscillator,
   external_hw:  ""      # Describe any external hardware needed
   discord:      "algofoogle#4505"      # Your discord handle, used for communication and automatically assigning tapeout role after a submission
   doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository

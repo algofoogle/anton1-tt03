@@ -9,7 +9,6 @@ module tb (
     // Testbench is controlled by test.py
     input clk,
     input reset,
-    input read,
     input [3:0] nibble,
     output [7:0] result
 );
@@ -22,7 +21,7 @@ module tb (
     end
 
     // Wire up the inputs and outputs to our respective test signals:
-    wire [7:0] inputs = {nibble, 1'b0, read, reset, clk};
+    wire [7:0] inputs = {nibble, 2'b0, reset, clk};
     wire [7:0] outputs;
     assign result = outputs;
 
