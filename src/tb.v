@@ -27,10 +27,10 @@ module tb (
     assign result = outputs;
 
     // Instantiate the DUT (Device Under Test):
-    anton_plus_minus anton_plus_minus(
+    anton_product anton_product(
         `ifdef GL_TEST
-        .vccd1( 1'b1),
-        .vssd1( 1'b0),
+            .vccd1( 1'b1),
+            .vssd1( 1'b0),
         `endif
         .io_in  (inputs),
         .io_out (outputs)

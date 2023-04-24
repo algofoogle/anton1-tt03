@@ -1,0 +1,29 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Mon Apr 24 10:58:20 2023
+[*]
+[dumpfile] "/home/zerotoasic/anton/tt03-test1/src/tb.vcd"
+[dumpfile_mtime] "Mon Apr 24 10:51:18 2023"
+[dumpfile_size] 3113
+[savefile] "/home/zerotoasic/anton/tt03-test1/src/tb2.gtkw"
+[timestart] 0
+[size] 2286 698
+[pos] 0 55
+*-28.200001 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb.
+[sst_width] 343
+[signals_width] 196
+[sst_expanded] 1
+[sst_vpaned_height] 190
+@28
+tb.clk
+tb.reset
+tb.read
+@22
+tb.nibble[3:0]
+@200
+-
+@22
+tb.result[7:0]
+[pattern_trace] 1
+[pattern_trace] 0
