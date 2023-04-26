@@ -3,6 +3,8 @@
 .vscode
 *.vcd
 runs
+gds_render.*
+tt/
 src/sim_build
 src/__pycache__/
 src/results.xml
