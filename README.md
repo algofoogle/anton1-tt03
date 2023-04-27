@@ -1,4 +1,21 @@
-![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg)
+<!--
+# SPDX-FileCopyrightText: 2023 Anton Maurovic <anton@maurovic.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
+-->
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg)
 
 # anton1-tt03: "Simple Multiply" submission for Tiny Tapeout 3 (TT03)
 
@@ -91,6 +108,7 @@ Here's what I specifically needed to do, when using the MPW8 VM:
     | `OPENLANE_ROOT`         | `/home/zerotoasic/asic_tools/openlane` |
     | `PDK_ROOT`              | `/home/zerotoasic/asic_tools/pdk` |
     | `PDK`                   | `sky130A` |
+
     ...if you're setting up from scratch, though, see the top of the [`gds` workflow](https://github.com/algofoogle/anton1-tt03/blob/main/.github/workflows/gds.yaml) for values, and note that references to `runner` is specific to the environment of the GitHub Action itself.
 4.  Install Python stuff needed by TT: `pip install -r tt/requirements.txt`
 5.  Run: `./tt/tt_tool.py --create-user-config`
@@ -118,10 +136,9 @@ Here's what I specifically needed to do, when using the MPW8 VM:
 
 ## Possible improvements
 
-*   Update repo description.
-*   LICENSE?
+*   Include the proper license in all source files.
 *   Support more bits, i.e. larger operand and hence larger result. Make this selective based on another input pin?
-*   The design could probably already start clocking out the first output byte upon receiving the last input nibble; 1 fewer cycles needed.
+*   The design could probably already start clocking out the first output byte while receiving the last input nibble; 1 fewer cycles needed.
 *   There is an SHL-8 (shift-left by 8 bits, i.e. `<<8`) that might synthesise to slightly fewer standard cells if we
     accept that we don't actually need to set the lower 8 bits to 0.
 *   Would some sort of progressive multi-step multiply mean smaller multiply logic and hence could support more bits?
