@@ -24,21 +24,19 @@ documentation:
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
-      Do synchronous reset first, then on each rising clock edge...
+      This very simple design streams in two 8-bit numbers (split into nibbles) and then streams out their 16-bit product (split into bytes).
+            
+      Following a synchronous reset, each rising clock edge represents a new step in a sequence of 6 steps:
+      (1) load first value's high nibble; (2) load first value's low nibble; (3) load second value's high nibble; (4) load second value's low nibble;
+      (5) present high byte of product result at output; (6) present low byte of product result at output.
 
-      Clock in each of two 8-bit values, one `nibble` at a time (high to low).
-
-      Then clock out a 16-bit value, one byte (via `result`) at a time (high to low).
+      It then repeats this sequence.
 
 # Instructions on how someone could test your project:
   how_to_test:  |
-      After synchronous reset, expect `result` output to be 0.
+      After synchronous reset, expect `result` output to be 0. Set `nibble` to a value of your choice, then pulse the clock. Repeat 3 more times.
 
-      Set `nibble` to a value of your choice, then pulse the clock.
-
-      Repeat 3 more times.
-
-      Then pulse the clock 1 more times, each time expecting to get a byte at the output `result`.
+      Then pulse the clock 2 more times, each time expecting to get a byte at the output `result`.
 
 # A description of what the inputs do
   inputs:               
@@ -65,6 +63,6 @@ documentation:
   tag:          "test, multiplier"      # comma separated list of tags: test encryption, experiment, clock, animation, utility, industrial, pwm, fpga, alu, microprocessor, risc, riscv, sensor, signal generator, fft, filter, music, bcd, sound, serial, timer, random number generator, calculator, decoder, counter, puzzle, multiplier, game, oscillator,
   external_hw:  ""      # Describe any external hardware needed
   discord:      "algofoogle#4505"      # Your discord handle, used for communication and automatically assigning tapeout role after a submission
-  doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
+  doc_link:     "https://github.com/algofoogle/anton1-tt03/blob/main/README.md"      # URL to longer form documentation.
   clock_hz:     "Any"   # Clock frequency in Hz (if required)
   picture:      ""      # relative path to a picture in your repository
