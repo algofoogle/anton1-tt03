@@ -1,10 +1,31 @@
+// SPDX-FileCopyrightText: 2023 Anton Maurovic <anton@maurovic.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// SPDX-License-Identifier: Apache-2.0
+
+// This is the main source for a Tiny Tapeout 3 submission, that
+// implements a simple multiplier. It gets nibbles clocked in
+// (configurable via `OP_NIBBLES`), for each of two operands, and
+// then the product can be clocked out as bytes.
+
 `default_nettype none
+`timescale 1ns/1ps
 
 module algofoogle_product (
     input   [7:0]   io_in,
     output  [7:0]   io_out
 );
-    localparam OP_NIBBLES = 3; // This determines both the size of the input, and the product output.
+    localparam OP_NIBBLES = 3; // Determines size of the input, and product output.
     localparam OP_BITS = OP_NIBBLES*4;
     localparam MUL_BITS = (OP_BITS*2);
 
@@ -30,10 +51,10 @@ module algofoogle_product (
             end else if (state == OP_NIBBLES*2) begin
                 // We've got the data we need; now calculate the product:
                 // product <= { {OP_BITS{1'b0}}, product[OP_BITS-1:0] } * { {OP_BITS{1'b0}}, product[MUL_BITS-1:OP_BITS] };
-                product <= { product[OP_BITS-1:0] } * { product[MUL_BITS-1:OP_BITS] };
+                product <= product[OP_BITS-1:0] * product[MUL_BITS-1:OP_BITS];
             end else begin
-                // Start clocking out the result, as 2 bytes.
-                product <= product << 8;
+                // Clocking out the result, as bytes.
+                product[MUL_BITS-1:8] <= product[MUL_BITS-9:0];
             end
             state <= (state==OP_NIBBLES*3-1) ? 0 : state+1;
         end
