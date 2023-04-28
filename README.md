@@ -25,6 +25,10 @@ through the [Tiny Tapeout](#what-is-tiny-tapeout) program.
 It implements what could be considered a primitive state machine that takes in two 8-bit numbers (clocked in one nibble at a time),
 and then gives the 16-bit product (clocked out one byte at a time), before then repeating this process.
 
+![Waveform showing 0xAE multiplied by 0xCD](./doc/vcd.png)
+
+The waveform above shows two operands being clocked in: `0xAE`, then `0xCD`. Then starting at 800&micro;s it starts clocking out the result: `0x8B56`.
+
 Building this is normally done automatically via GitHub Actions, but more info about this is provided below.
 
 
