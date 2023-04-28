@@ -25,7 +25,7 @@ module algofoogle_product (
     input   [7:0]   io_in,
     output  [7:0]   io_out
 );
-    localparam OP_NIBBLES = 3; // Determines size of the input, and product output.
+    localparam OP_NIBBLES = 2; // Determines size of the input, and product output.
     localparam OP_BITS = OP_NIBBLES*4;
     localparam MUL_BITS = (OP_BITS*2);
 

@@ -3,7 +3,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles
 
 
-OP_NIBBLES = 3
+OP_NIBBLES = 2
 
 
 async def send_nibble(dut, value):
@@ -24,6 +24,21 @@ async def get_product(dut):
         word <<= 8
         word |= int(dut.result.value)
     return word
+
+# This test just generates a sample waveform for documentation:
+@cocotb.test()
+async def test_demo(dut):
+    clock = Clock(dut.clk, 100, units="us") # 10kHz clock.
+    cocotb.start_soon(clock.start())
+    dut.reset.value = 1
+    await ClockCycles(dut.clk, 4)
+    dut.reset.value = 0
+    await FallingEdge(dut.clk)
+    await send_operand(dut, 0xAE)
+    await send_operand(dut, 0xCD)
+    product = await get_product(dut)
+    assert product == 0xAE * 0xCD
+
 
 @cocotb.test()
 async def test_product(dut):

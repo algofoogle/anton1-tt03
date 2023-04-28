@@ -29,19 +29,16 @@ Building this is normally done automatically via GitHub Actions, but more info a
 
 NOTE:
 *   You can configure the size of each input operand via `OP_NIBBLES` in both [`product.v`](./src/product.v)
-and [`test.py`](./src/test.py).
+and [`test.py`](./src/test.py). It is currently set to 2.
 *   I can't currently get it to fit more than 3-nibble operands in the designated Tiny Tapeout area.
-*   `./tt/tt_tool.py --print-stats` gives these utilisation stats for different nibble counts:
-
-| `OP_NIBBLES`  | Utilisation (%) | Wire length (um) | Cell count |
-|---------------|-----------------|------------------|------------|
-| 1             |  4.96           |  6436            |  101       |
-| 2             | 18.98           | 14093            |  415       |
-| 3             | 41.04           | 25601            |  897       |
-| 4 (Fails fit) | 71.98           | -1               | 1586       |
-
-NOTE: Cell count comes from `runs/wokwi/reports/synthesis/1-synthesis.AREA_0.stat.rpt`
-
+*   `./tt/tt_tool.py --print-stats` gives below utilisation stats for different nibble counts.
+    NOTE: Cell count comes from `runs/wokwi/reports/synthesis/1-synthesis.AREA_0.stat.rpt`
+    | `OP_NIBBLES`  | Utilisation (%) | Wire length (um) | Cell count |
+    |---------------|-----------------|------------------|------------|
+    | 1             |  4.96           |  6436            |  101       |
+    | 2             | 18.98           | 14093            |  415       |
+    | 3             | 41.04           | 25601            |  897       |
+    | 4 (Fails fit) | 71.98           | -1               | 1586       |
 
 
 ## What's in this repo?
