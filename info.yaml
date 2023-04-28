@@ -65,4 +65,4 @@ documentation:
   discord:      "algofoogle#4505"      # Your discord handle, used for communication and automatically assigning tapeout role after a submission
   doc_link:     "https://github.com/algofoogle/anton1-tt03/blob/main/README.md"      # URL to longer form documentation.
   clock_hz:     "Any"   # Clock frequency in Hz (if required)
-  picture:      ""      # relative path to a picture in your repository
+  picture:      "doc/vcd.png"      # relative path to a picture in your repository
